@@ -7,7 +7,7 @@ public class Main {
         int N=Integer.parseInt(br.readLine());
         
         sb.append((1<<N)-1).append("\n");
-        
+
         hanoi(N, 1, 2, 3);
 
         System.out.println(sb);
@@ -15,8 +15,7 @@ public class Main {
         br.close();
     }
     static void hanoi(int n, int a, int b, int c){
-        if (n==1) sb.append(a).append(" ").append(c).append("\n");
-        else{
+        if (n>=1){
             hanoi(n-1,a,c,b);
             sb.append(a).append(" ").append(c).append("\n");
             hanoi(n-1,b,a,c);
