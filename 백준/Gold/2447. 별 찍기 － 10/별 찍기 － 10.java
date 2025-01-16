@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.*;
 
 public class Main {
     static char[][] pattern;
@@ -7,10 +6,8 @@ public class Main {
         BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
         int N=Integer.parseInt(br.readLine());
         pattern=new char[N][N];
-        for (int i=0; i<N; i++){
-            Arrays.fill(pattern[i], ' ');
-        }
-        star(0, 0, N);
+
+        star(0, 0, N,false);
 
         StringBuilder sb=new StringBuilder();
         for (int i=0; i<N; i++){
@@ -24,16 +21,30 @@ public class Main {
 
         br.close();
     }
-    static void star(int x, int y, int N){
+    static void star(int x, int y, int N, boolean space){
+        if (space){
+            for (int i=x; i<x+N; i++){
+                for (int j=y; j<y+N; j++){
+                    pattern[i][j]=' ';
+                }
+            }
+            return;
+        }
+
         if (N==1){
             pattern[x][y]='*';
             return;
         }
 
-        for (int i=0; i<3; i++){
-            for (int j=0; j<3; j++){
-                if (!(i==1 && j==1)){
-                    star(x+i*(N/3),y+j*(N/3),N/3);
+        int size=N/3;
+        int count=0;
+        for (int i=x; i<x+N; i+=size){
+            for (int j=y; j<y+N; j+=size){
+                count++;
+                if (count==5){
+                    star(i, j, size, true);
+                } else {
+                    star(i, j, size, false);
                 }
             }
         }
