@@ -2,13 +2,13 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static String[][] pattern;
+    static char[][] pattern;
     public static void main(String[] args) throws IOException {
         BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
         int N=Integer.parseInt(br.readLine());
-        pattern=new String[N][N];
+        pattern=new char[N][N];
         for (int i=0; i<N; i++){
-            Arrays.fill(pattern[i], " ");
+            Arrays.fill(pattern[i], ' ');
         }
         star(0, 0, N);
 
@@ -26,7 +26,7 @@ public class Main {
     }
     static void star(int x, int y, int N){
         if (N==1){
-            pattern[x][y]="*";
+            pattern[x][y]='*';
             return;
         }
 
