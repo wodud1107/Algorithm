@@ -34,6 +34,7 @@ public class Main {
         if (index==N){
             max=Math.max(max, res);
             min=Math.min(min, res);
+            return;
         }
 
         for (int i=0; i<4; i++){
