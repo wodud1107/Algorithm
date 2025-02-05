@@ -1,15 +1,15 @@
 import java.util.*;
 
 public class Solution {
-    public ArrayDeque<Integer> solution(int[] arr){
-        ArrayDeque<Integer> queue=new ArrayDeque<>();
+    public Stack<Integer> solution(int[] arr){
+        Stack<Integer> stack=new Stack<>();
 
-        queue.add(arr[0]);
+        stack.add(arr[0]);
         for (int i=1; i<arr.length; i++){
-            if (queue.peekLast()==arr[i]) continue;
-            else queue.add(arr[i]);
+            if (stack.peek()==arr[i]) continue;
+            else stack.add(arr[i]);
         }
 
-        return queue;
+        return stack;
     }
 }
