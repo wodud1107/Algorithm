@@ -7,6 +7,18 @@ public class Main {
         String S=br.readLine();
         int q=Integer.parseInt(br.readLine());
 
+        int[][] appear=new int[26][S.length()+1];
+        int check;
+        for (int i=0; i<26; i++){
+            for (int j=1; j<=S.length(); j++){
+                check=0;
+                if (S.charAt(j-1)==i+'a'){
+                    check=1;
+                }
+                appear[i][j]=appear[i][j-1]+check;
+            }
+        }
+
         StringTokenizer st;
         StringBuilder sb=new StringBuilder();
         while(q-- >0){
@@ -15,17 +27,7 @@ public class Main {
             int l=Integer.parseInt(st.nextToken());
             int r=Integer.parseInt(st.nextToken());
 
-            int check;
-            int[] appear=new int[S.length()+1];
-            for (int i=1; i<=S.length(); i++){
-                check=0;
-                if (S.charAt(i-1)==find){
-                    check=1;
-                }
-                appear[i]=appear[i-1]+check;
-            }
-
-            sb.append(appear[r+1]-appear[l]).append('\n');
+            sb.append(appear[find-'a'][r+1]-appear[find-'a'][l]).append('\n');
         }
         
         System.out.println(sb);
