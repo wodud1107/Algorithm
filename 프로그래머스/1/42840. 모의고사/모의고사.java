@@ -12,10 +12,7 @@ class Solution {
         result[1]=comp(second, answers);
         result[2]=comp(third, answers);
 
-        int max=Integer.MIN_VALUE;
-        for (int i=0; i<result.length; i++){
-            if (max<result[i]) max=result[i];
-        }
+        int max=Math.max(result[0], Math.max(result[1], result[2]));
 
         ArrayList<Integer> ans=new ArrayList<>();
         for (int i=0; i<result.length; i++){
