@@ -5,7 +5,7 @@ int main() {
     int N;
     cin >> N;
 
-    for (int i = 1 ; i < N; i++) {
+    for (int i = max(1, N-60) ; i < N; i++) {
         int sum = i;
         int tmp = i;
         while (tmp > 0) {
