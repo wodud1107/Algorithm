@@ -6,7 +6,7 @@ int main(){
     cin >> N;
 
     int cnt = 0;
-    for (int i = 666; i < 10000667; i++) {
+    for (int i = 666; cnt <= 10000; i++) {
         int tmp = i;
         while (tmp > 665) {
             int check = tmp % 1000;
