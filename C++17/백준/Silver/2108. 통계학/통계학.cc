@@ -49,7 +49,7 @@ int main(){
     sort(num.begin(), num.end());
 
     double avg = (double) sum / N;
-    cout << (round(avg) == 0 ? 0 : round(avg) )<< '\n';
+    cout << (int) round(avg) << '\n';
     cout << num.at(N / 2) << '\n';
     cout << mode(num) << '\n';
     cout << *(num.end()-1) - (*num.begin()) << '\n';
