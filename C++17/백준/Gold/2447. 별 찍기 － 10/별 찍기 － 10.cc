@@ -1,47 +1,35 @@
-#include <iostream>
-#include <vector>
-using namespace std;
+#include <cstdio>
+#include <cstring>
 
-vector<string> solve(int length);
+char board[2188][2188];
 
-int main(){
-    ios::sync_with_stdio(false);
-    cin.tie(NULL);
-
-    int N;
-    cin >> N;
-
-    vector<string> star = solve(N);
-
-    for (string& s : star) cout << s << '\n';
-
-    return 0;
-}
-
-vector<string> solve(int length){
-    if (length == 3) return {
-        "***", // 0
-        "* *", // 1
-        "***" // 2
-    };
-
-    vector<string> prev = solve(length / 3);
-    vector<string> result;
-
-    for (int i = 0; i < length; i++){
-        string line;
-        // top & bottom
-        if (i < length / 3 || i >= 2 * (length / 3)){
-            for (int j = 0; j < 3; j++){
-                line += prev[i % (length / 3)];
-            }
-        } else { // middle
-            line += prev[i % (length / 3)];
-            line += string((length / 3), ' ');
-            line += prev[i % (length / 3)];
-        }
-        result.push_back(line);
+void star(int N, int x, int y){
+    if (N == 1){
+        board[x][y] = '*';
+        return;
     }
 
-    return result;
+    int part = N / 3;
+    for (int i = 0; i < 3; i++){
+        for (int j = 0; j < 3; j++){
+            if (i == 1 && j == 1) continue;
+            star(part, x + i * part, y + j * part);
+        }
+    }
+}
+
+int main(){
+    int N;
+    scanf("%d", &N);
+
+    std::memset(board, ' ', sizeof(board));
+
+    star(N, 0, 0);
+
+    for (int i = 0; i < N; i++){
+        board[i][N] = '\0';
+        printf("%s\n", board[i]);
+    }
+
+    return 0;
 }
