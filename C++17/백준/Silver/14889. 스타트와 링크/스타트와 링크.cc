@@ -31,8 +31,8 @@ int main(){
         for (int j = 0; j < N; j++){
             int x; cin >> x;
             sum += x;
-            R[j] += x;
-            C[i] += x;
+            R[i] += x;
+            C[j] += x;
         }
     }
 
