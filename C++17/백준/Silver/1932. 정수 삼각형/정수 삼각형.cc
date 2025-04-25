@@ -1,6 +1,5 @@
 #include <iostream>
-#include <climits>
-#include <cstring>
+#include <algorithm>
 using namespace std;
 
 int main(){
@@ -12,25 +11,22 @@ int main(){
     int triangle[n][n];
     for (int i = 0; i < n; i++){
         for (int j = 0; j <= i; j++){
-            int x; cin >> x;
-
-            triangle[i][j] = x;
+            cin >> triangle[i][j];
         }
     }
 
-    int dp[n][n];
-    memset(dp, 0, sizeof(dp));
-    dp[0][0] = triangle[0][0];
+    int dp[n];
+    fill(dp, dp + n, 0);
+    dp[0] = triangle[0][0];
     for (int i = 1; i < n; i++){
-        for (int j = 0; j <= i; j++){
-            dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - 1]) + triangle[i][j];
+        for (int j = i; j >= 0; j--){
+            if (j == 0) dp[j] = dp[j] + triangle[i][j];
+            else if (j == i) dp[j] = dp[j - 1] + triangle[i][j];
+            else dp[j] = max(dp[j], dp[j - 1]) + triangle[i][j];
         }
     }
 
-    int max_res = INT_MIN;
-    for (int i = 0; i < n; i++){
-        max_res = max(max_res, dp[n - 1][i]);
-    }
+    int max_res = *max_element(dp, dp + n);
 
     cout << max_res << '\n';
 
