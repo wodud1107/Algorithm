@@ -10,7 +10,7 @@ void calculate_score(const vector<int>& ryan, const vector<int>& apeach, int& ry
     ryan_score = 0;
     apeach_score = 0;
     
-    for (int i = 0; i < 11; i++) {
+    for (int i = 10; i >= 0; i--) {
         if (ryan[i] == 0 && apeach[i] == 0) continue;
         
         if (ryan[i] > apeach[i]) {
@@ -21,17 +21,17 @@ void calculate_score(const vector<int>& ryan, const vector<int>& apeach, int& ry
     }
 }
 
-bool is_better(const vector<int>& new_answer) {
+bool is_better(const vector<int>& ryan) {
     for (int i = 10; i >= 0; i--) {
-        if (new_answer[i] > answer[i]) return true;
-        if (new_answer[i] < answer[i]) return false;
+        if (ryan[i] > answer[i]) return true;
+        if (ryan[i] < answer[i]) return false;
     }
-    return false;
+    return (false);
 }
 
-void dfs(int index, int arrows_left, vector<int>& ryan, const vector<int>& apeach) {
+void dfs(int index, int arrows_left, vector<int>& ryan, vector<int>& apeach) {
     if (index == 11 || arrows_left == 0) {
-        if (arrows_left > 0) {
+        if (arrows_left) {
             ryan[10] += arrows_left;
         }
         
@@ -50,7 +50,7 @@ void dfs(int index, int arrows_left, vector<int>& ryan, const vector<int>& apeac
             }
         }
         
-        if (arrows_left > 0) {
+        if (arrows_left) {
             ryan[10] -= arrows_left;
         }
         
