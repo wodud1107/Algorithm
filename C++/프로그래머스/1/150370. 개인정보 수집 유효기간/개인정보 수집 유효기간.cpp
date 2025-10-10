@@ -1,45 +1,39 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <sstream>
 
 using namespace std;
 
-int dateToDays(string date_str) {
-    int year = stoi(date_str.substr(0, 4));
-    int month = stoi(date_str.substr(5, 2));
-    int day = stoi(date_str.substr(8, 2));
-    
-    return (year * 12 * 28) + (month * 28) + day;
+int convert_to_days(string date) {
+    int years = stoi(date.substr(0, 4));
+    int months = stoi(date.substr(5, 2));
+    int days = stoi(date.substr(8, 2));
+    return (years * 12 + months) * 28 + days;
 }
 
 vector<int> solution(string today, vector<string> terms, vector<string> privacies) {
     vector<int> answer;
     
-    int today_days = dateToDays(today);
+    int _today = convert_to_days(today);
     
-    map<char, int> term_map;
+    map<string, int> term_expiration;
     for (const string& term : terms) {
-        size_t pos = term.find(' ');
-        char type = term[0];
+        stringstream ss(term);
+        string term_name, term_exp;
+        ss >> term_name >> term_exp;
         
-        int duration_month = stoi(term.substr(pos + 1));
-        
-        term_map[type] = duration_month;
+        int term_days = stoi(term_exp) * 28;
+        term_expiration[term_name] = term_days;
     }
     
-    for (int i = 0; i < privacies.size(); ++i) {
-        const string& privacy = privacies[i];
+    for (int i = 0; i < privacies.size(); i++) {
+        stringstream ss(privacies[i]);
+        string date, term;
+        ss >> date >> term;
         
-        size_t pos = privacy.find(' ');
-        
-        string collection_date_str = privacy.substr(0, pos);
-        char term_type = privacy[pos + 1];
-        
-        int collection_days = dateToDays(collection_date_str);
-        int duration_months = term_map[term_type];
-        int expiration_days = collection_days + (duration_months * 28);
-        
-        if (today_days >= expiration_days) {
+        int regist_days = convert_to_days(date);
+        if (_today - regist_days >= term_expiration[term]) {
             answer.push_back(i + 1);
         }
     }
