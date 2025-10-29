@@ -20,13 +20,13 @@ start = [2, 3, 5, 7]
 def dfs(go):
     if (go >= 10 ** N): return
     
-    for i in range(10):
+    for i in [1, 3, 7, 9]:
         if (is_prime(go + i)):
             result.add(go + i)
             dfs((go + i) * 10)
 
 for i in start:
-    dfs(i)
+    dfs(i * 10)
     
 answer = []
 
