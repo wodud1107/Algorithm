@@ -14,7 +14,7 @@ def dfs(start, current, visited):
     
     if not visited[next]:
         dfs(start, next, visited)
-    elif visited[next] and next == start:
+    elif next == start:
         ans_list.append(start)
 
 for i in range(1, N + 1):
