@@ -19,37 +19,22 @@ for i in range(N):
             teachers.append((i, j))    
             
 def solve(board):
-    for (i,j) in teachers:
-        is_blocked = False
-        for k in range(i, -1, -1):
-            if not is_blocked:
-                if board[k][j] == "S": return False
-            if board[k][j] == "O":
-                is_blocked = True
-                
-        is_blocked = False
-        for k in range(i, N):
-            if not is_blocked:
-                if board[k][j] == "S": return False
-            if board[k][j] == "O":
-                is_blocked = True
-                
-        is_blocked = False
-        for k in range(j, -1, -1):
-            if not is_blocked:
-                if board[i][k] == "S": return False
-            if board[i][k] == "O":
-                is_blocked = True
-
-        is_blocked = False
-        for k in range(j, N):
-            if not is_blocked:
-                if board[i][k] == "S": return False
-            if board[i][k] == "O":
-                is_blocked = True
+    dx = [-1, 1, 0, 0]
+    dy = [0, 0, -1, 1]
+    
+    for (x,y) in teachers:
+        for i in range(4):
+            nx, ny = x, y
             
+            while True:
+                nx += dx[i]
+                ny += dy[i]
+                
+                if not (0 <= nx < N and 0 <= ny < N): break
+                if board[nx][ny] == "O": break
+                if board[nx][ny] == "S": return False
     return True
-        
+    
 for obs in combinations(empties, 3):
     temp_board = [row[:] for row in board]
     
