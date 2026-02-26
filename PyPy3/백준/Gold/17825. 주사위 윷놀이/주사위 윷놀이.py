@@ -56,8 +56,11 @@ def dfs(turn, current_score):
     if turn == 10:
         return current_score
     
-    max_score = 0
+    max_score = current_score
     for i in range(4):
+        if pieces[i] in pieces[:i]:
+            continue
+        
         current_node = pieces[i]
         
         if current_node == end_node:
