@@ -1,21 +1,5 @@
 import sys
-from collections import deque
 input = sys.stdin.readline
-
-'''
-R x C 격자
-각 (r, c) 칸의 미세먼지 양이 실시간 모니터링
-
-공기청정기는 1 열에 설치 두 행 차지
-- 1초마다 모든 미세먼지가 네 방향 확산
-- 공기청정기가 있거나 칸이 없으면 확산 x
-- 확산되는 양은 1/5의 몫
-- 남은 양은 A - A / 5 * 확산 방향 개수
-- 공기청정기 위는 반시계 방향 순환 아래는 시계 방향 순환
-- 바람 불면 바람 방향 대로 한칸 이동
-- 미세먼지가 없고 공기청정기로 들어가면 정화
-
-'''
 
 R, C, T = map(int, input().split())
 board = [[0 for _ in range(C)] for _ in range(R)]
@@ -38,23 +22,20 @@ def spread_dirts(board):
     dx = [-1, 1, 0, 0]
     dy = [0, 0, -1, 1]
     
-    queue = deque(dirts)
-    while queue:
-        (r, c) = queue.popleft()
+    for (r, c) in dirts:
+        amount = board[r][c] // 5
+        if amount == 0: continue
         
         count = 0
         for i in range(4):
             nx = r + dx[i]
             ny = c + dy[i]
             
-            if (nx, ny) in purifier:
-                continue
-            
-            if 0 <= nx < R and 0 <= ny < C:
-                temp_board[nx][ny] += board[r][c] // 5
+            if 0 <= nx < R and 0 <= ny < C and board[nx][ny] != -1:
+                temp_board[nx][ny] += amount
                 count += 1
                 
-        temp_board[r][c] -= board[r][c] // 5 * count
+        temp_board[r][c] -= amount * count
     
     return temp_board
 
