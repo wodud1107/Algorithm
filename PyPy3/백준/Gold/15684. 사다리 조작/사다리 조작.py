@@ -6,14 +6,11 @@ N, M, H = map(int, input().split())
 if M == 0: print(0); exit(0)
 
 ladders = [[i for i in range(N + 1)] for _ in range(H + 1)]
-def make_row(ladders, a, b):
-    ladders[a][b] = b + 1
-    ladders[a][b + 1] = b
-
 for _ in range(M):
     (a, b) = map(int, input().split())
-    make_row(ladders, a, b)    
-
+    ladders[a][b] = b + 1
+    ladders[a][b + 1] = b
+    
 def down(ladders, i):
     current = i
     for r in range(1, H + 1):
@@ -24,9 +21,11 @@ def down(ladders, i):
 
 def check_all_down(ladders):
     for n in range(1, N + 1):
-        if not down(ladders, n):
-            return False
-
+        current = n
+        for r in range(1, H + 1):
+            current = ladders[r][current]
+            
+        if current != n: return False
     return True
 
 def dfs(current_count, x, y, target_count):
@@ -41,7 +40,9 @@ def dfs(current_count, x, y, target_count):
         
         for j in range(start, N):
             if ladders[i][j] == j and ladders[i][j + 1] == j + 1:
-                make_row(ladders, i, j)
+                ladders[i][j] = j + 1
+                ladders[i][j + 1] = j
+                
                 dfs(current_count + 1, i, j + 2, target_count)
                 
                 ladders[i][j] = j
