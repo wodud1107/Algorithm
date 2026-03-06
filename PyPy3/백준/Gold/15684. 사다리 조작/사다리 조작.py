@@ -2,6 +2,26 @@ import sys
 from itertools import combinations
 input = sys.stdin.readline
 
+'''
+N 개 세로 M 개 가로
+세로선 마다 H 개 가로
+사다리 게임 규칙대로 내려오면서 만나면 옆 세로선으로 이동
+2 <= N <= 10, 1 <= H <= 30, 0 <= M <= (N-1) * H
+
+M 개의 가로선 정보
+(a, b) b <-> b + 1 세로선끼리 연결 1 <= a <= H 위치에서
+
+i 번 세로선 결과가 i 가 나오게 하는 추가해야할 최소 가로선 개수 3보다 크거나 불가능하면 -1
+
+2차원 배열을 생성해서 각 행에 숫자를 매겨서 세로선 넘버링
+가로선 연결되면 세로선 번호를 크로스
+
+배열에 저장된 값을 통해서
+연결된 번호 열로 이동해서 내려가는 down 함수
+
+브루트포스로 가로선이 2개 연장되지 않도록 체크해서 진행
+'''
+
 N, M, H = map(int, input().split())
 
 if M == 0: print(0); exit(0)
@@ -22,25 +42,22 @@ for _ in range(M):
 remaining = [(a, b) for b in range(1, N) for a in range(1, H + 1) if (a, b) not in row]
 
 def down(ladders, i):
-    tracks = [i]
     current = i
     for r in range(1, H + 1):
         current = ladders[r][current]
-        tracks.append(current)
         
-    if tracks[-1] == i: return True
+    if current == i: return True
     return False
 
-is_broken = False
-for n in range(1, N + 1):
-    if not down(ladders, n):
-        is_broken = True
-        break
+def check_all_down(ladders):
+    for n in range(1, N + 1):
+        if not down(ladders, n):
+            return False
 
-if not is_broken: print(0); exit(0)
+    return True
 
-for count in range(3):
-    for rows in combinations(remaining, count + 1):
+for count in range(4):
+    for rows in combinations(remaining, count):
         temp_ladders = [row[:] for row in ladders]
         temp_row = row.copy()
         for add_row in rows:
@@ -50,13 +67,6 @@ for count in range(3):
             if add_row not in temp_row:
                 make_row(temp_ladders, add_row[0], add_row[1])
         
-        is_broken = False
-        for n in range(1, N + 1):
-            if not down(temp_ladders, n):
-                is_broken = True
-                break
-        
-        if is_broken: continue
-        else: print(count + 1); exit(0)
+        if check_all_down(temp_ladders): print(count); exit(0)
         
 print(-1)
