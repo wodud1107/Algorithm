@@ -30,7 +30,7 @@ def init_board(board, x, y):
     visited = [[-1] * N for _ in range(N)]
     visited[x][y] = 0
     q = deque([(x, y)])
-    eat = sorted(find(temp_board, shark_size))
+    eat = find(temp_board, shark_size)
     return q, eat, visited, temp_board
 
 q, eat, visited, board = init_board(board, s_x, s_y)
@@ -56,7 +56,7 @@ while q:
     if eat_cnt == shark_size:
         eat_cnt = 0
         shark_size += 1
-        eat = sorted(find(board, shark_size))
+        eat = find(board, shark_size)
     
     for (dx, dy) in ((-1, 0), (1, 0), (0, -1), (0, 1)):
         nx, ny = x + dx, y + dy
