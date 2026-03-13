@@ -3,28 +3,23 @@ from itertools import permutations
 input = sys.stdin.readline
 
 N = int(input())
-scores = [list(map(int, input().split())) for _ in range(3)]
 
-dp = [[5 * N] * 3 for _ in range(1 << 3)]
-for i in range(N):
-    new_dp = [[5 * N] * 3 for _ in range(1 << 3)]
-    for mask in range(1, 1 << 3):
-        for p in range(3):
-            if mask & (1 << p):
-                prev_mask = mask ^ (1 << p)
-                
-                if prev_mask == 0:
-                    if i == 0: new_dp[mask][p] = scores[p][i]
-                    else: new_dp[mask][p] = dp[mask][p] + scores[p][i]
-                
-                else:
-                    result = 5 * N
-                    for prev_p in range(3):
-                        if prev_mask & (1 << prev_p):
-                            result = min(result, dp[prev_mask][prev_p])
-                            
-                    stay = dp[mask][p]
-                    new_dp[mask][p] = min(result, stay) + scores[p][i]
-    dp = new_dp
+prefix = [[0] + list(map(int, input().split())) for _ in range(3)]
+for i in range(3):
+    for j in range(1, N + 1):
+        prefix[i][j] += prefix[i][j - 1]
+        
+min_difficulty = 5 * N
+for p in permutations(range(3)):
+    p1, p2, p3 = p
+    
+    min_prev_diff = 5 * N
+    for j in range(2, N):
+        i = j - 1
+        cur_diff = prefix[p1][i] - prefix[p2][i]
+        min_prev_diff = min(min_prev_diff, cur_diff)
+            
+        result = min_prev_diff + prefix[p2][j] - prefix[p3][j] + prefix[p3][N]
+        min_difficulty = min(min_difficulty, result)
 
-print(min(dp[7]))
+print(min_difficulty)
