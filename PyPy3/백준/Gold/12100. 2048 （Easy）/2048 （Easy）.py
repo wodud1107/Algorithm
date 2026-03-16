@@ -21,7 +21,7 @@ def move(dir, board):
     
     for i in range(N):
         nums = []
-        for j in range(N - 1, -1, -1):
+        for j in range(N):
             if rotated[i][j] != 0:
                 nums.append(rotated[i][j])
         
@@ -40,7 +40,7 @@ def move(dir, board):
             
         temp_board[i] = merged
             
-    return temp_board
+    return rotate_board(4 - dir, temp_board)
 
 def dfs(board, cnt, val):
     if (cnt == 5):
