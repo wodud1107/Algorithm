@@ -7,29 +7,38 @@ seats = [[i for i in (input().rstrip())] for _ in range(5)]
 
 line = [i for i in range(25)]
 answer = 0
-for combs in combinations(line, 7):
-    selected = set((l // 5, l % 5) for l in combs)
-    s_cnt = sum(1 for (x, y) in selected if seats[x][y] == 'S')
+for list in combinations(line, 7):
+    members = []
+    temp = [row[:] for row in seats]
+    for l in list:
+        x = l // 5
+        y = l % 5
+        members.append(seats[x][y])
+        temp[x][y] = 'B'
     
-    if s_cnt >= 4:
-        x = combs[0] // 5
-        y = combs[0] % 5
+    if members.count('S') >= 4:
+        x = list[0] // 5
+        y = list[0] % 5
         
         dx = [-1, 1, 0, 0]
         dy = [0, 0, -1, 1]
         
         q = deque([(x, y)])
-        visited = set([(x, y)])
         while q:
             cx, cy = q.popleft()
             
             for i in range(4):
                 nx, ny = cx + dx[i], cy + dy[i]
-                
-                if (nx, ny) in selected and (nx, ny) not in visited:
-                    visited.add((nx, ny))
+                if not (0 <= nx < 5 and 0 <= ny < 5): continue
+                if temp[nx][ny] != 'B': continue
+                else:
+                    temp[nx][ny] = 'O'
                     q.append((nx, ny))
         
-        if len(visited) == 7: answer += 1
+        cnt = 0
+        for i in range(5):
+            for j in range(5):
+                if temp[i][j] == 'B': cnt += 1
+        if cnt == 0: answer += 1
 
 print(answer)
