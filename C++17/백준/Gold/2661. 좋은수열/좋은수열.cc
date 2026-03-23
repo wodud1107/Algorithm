@@ -1,28 +1,26 @@
 #include <iostream>
-#include <vector>
+#include <string>
 using namespace std;
 
 int N;
-void solve(int N, vector<int>& seq) {
-    int length = seq.size();
+void solve(int N, string& seq) {
+    int len = seq.length();
 
-    for (int i = 1; i < length / 2 + 1; i++) {
-        vector<int> left(seq.end() + (-2 * i), seq.end() + (-2 * i) + i);
-        vector<int> right(seq.end() - i, seq.end());
+    for (int i = 1; i < len / 2 + 1; i++) {
+        string left = seq.substr(len - 2 * i, i);
+        string right = seq.substr(len - i, i);
 
         if (left == right) return;
     }
 
 
-    if (length == N) {
-        for (int i = 0; i < N; i++) {
-            cout << seq[i];
-        }
+    if (len == N) {
+        cout << seq;
         exit(0);
     }
 
     for (int i = 1; i < 4; i++) {
-        seq.push_back(i);
+        seq.push_back(i + '0');
         solve(N, seq);
         seq.pop_back();
     }
@@ -33,7 +31,7 @@ int main() {
     cin.tie(NULL);
 
     cin >> N;
-    vector<int> init_seq = {1};
+    string init_seq = "1";
     solve(N, init_seq);    
 
     return 0;
