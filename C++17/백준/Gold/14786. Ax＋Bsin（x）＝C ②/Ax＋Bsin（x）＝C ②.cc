@@ -7,13 +7,13 @@ int main() {
     scanf("%lf %lf %lf", &A, &B, &C);
 
     double s = 0, e = 100000;
-    while (s <= e) {
+    while (e - s > 1e-9) {
         double mid = (s + e) / 2;
         double val = A * mid + B * sin(mid);
         if (val * val > C * C)
-            e = mid - 1e-9;
+            e = mid;
         else if (val * val < C * C)
-            s = mid + 1e-9;
+            s = mid;
         else break;
     }
 
