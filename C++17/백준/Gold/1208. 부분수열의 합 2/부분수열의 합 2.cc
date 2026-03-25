@@ -1,39 +1,44 @@
 #include <iostream>
-#include <vector>
 #include <algorithm>
 using namespace std;
 
-vector<int> get_subset_sums(const vector<int>& arr, int start, int end) {
-    vector<int> sums = { 0 };
+int N, S;
+int arr[41];
+int l_sums[1050000];
+int r_sums[1050000];
+
+void get_subset_sums(int start, int end, int* out_sums, int& out_size) {
+    out_sums[0] = 0;
+    out_size = 1;
+
     for (int i = start; i < end; i++) {
-        int current_size = sums.size();
+        int current_size = out_size;
         for (int j = 0; j < current_size; j++) {
-            sums.push_back(sums[j] + arr[i]);
+            out_sums[out_size++] = out_sums[j] + arr[i];
         }
     }
-    return sums;
 }
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(NULL);
 
-    int N, S;
     cin >> N >> S;
-    vector<int> arr(N);
     for (int i = 0; i < N; i++) {
         cin >> arr[i];
     }
 
-    vector<int> l_sums = get_subset_sums(arr, 0, N / 2);
-    vector<int> r_sums = get_subset_sums(arr, N / 2, N);
-    sort(l_sums.begin(), l_sums.end());
-    sort(r_sums.begin(), r_sums.end());
+    int l_size = 0, r_size = 0;
+    int mid = N / 2;
+    get_subset_sums(0, mid, l_sums, l_size);
+    get_subset_sums(mid, N, r_sums, r_size);
+    sort(l_sums, l_sums + l_size);
+    sort(r_sums, r_sums + r_size);
 
     int l_ptr = 0;
-    int r_ptr = r_sums.size() - 1;
+    int r_ptr = r_size - 1;
     long long answer = 0;
-    while (l_ptr < l_sums.size() && r_ptr >= 0) {
+    while (l_ptr < l_size && r_ptr >= 0) {
         int l = l_sums[l_ptr];
         int r = r_sums[r_ptr];
         int curr_sum = l + r;
@@ -42,7 +47,7 @@ int main() {
             long long l_cnt = 0;
             long long r_cnt = 0;
 
-            while (l_ptr < l_sums.size() && l_sums[l_ptr] == l) {
+            while (l_ptr < l_size && l_sums[l_ptr] == l) {
                 l_cnt++;
                 l_ptr++;
             }
