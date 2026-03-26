@@ -2,27 +2,28 @@ import sys
 input = sys.stdin.readline
 
 N = int(input())
-prefix = {}
+prefixes = set()
 word_count = {}
 
 for _ in range(N):
     word = input().strip()
-    word_count[word] = word_count.get(word, 0) + 1
     
-    current = prefix
+    if word in word_count:
+        word_count[word] += 1
+    else: word_count[word] = 1
+    
     alias = ""
     found_alias = False
     
-    for char in word:
-        if not found_alias:
-            alias += char
-            
-        if char not in current:
-            current[char] = {}
+    for i in range(1, len(word) + 1):
+        prefix = word[:i]
+        
+        if not found_alias and prefix not in prefixes:
+            alias = prefix
             found_alias = True
         
-        current = current[char]
-    
+        prefixes.add(prefix)    
+
     if not found_alias:
         alias = word
         if word_count[word] > 1:
