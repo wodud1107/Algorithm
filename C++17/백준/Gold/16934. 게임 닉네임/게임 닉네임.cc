@@ -1,43 +1,46 @@
 #include <iostream>
 #include <string>
-#include <unordered_set>
-#include <unordered_map>
 using namespace std;
 
 int N;
 string s;
+const int MAX_NODES = 1000005;
+const int ROOT = 1;
+int nxt[MAX_NODES][26];
+int end_cnt[MAX_NODES];
+int unused = 2;
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(NULL);
 
     cin >> N;
-    unordered_set<string> prefixes;
-    unordered_map<string, int> word_cnt;
 
     while (N--) {
         cin >> s;
 
-        word_cnt[s]++;
-
+        int curr = ROOT;
         string alias = "";
         bool found_alias = false;
 
-        for (int i = 1; i <= s.size(); i++) {
-            string prefix(s.begin(), s.begin() + i);
-            auto it = prefixes.find(prefix);
-
-            if (!found_alias && it == prefixes.end()) {
-                alias = prefix;
-                found_alias = true;
-            }
+        for (char c: s) {
+            int idx = c - 'a';
             
-            prefixes.insert(prefix);
+            if (!found_alias)
+                alias += c;
+
+            if (nxt[curr][idx] == 0) {
+                if (!found_alias) found_alias = true;
+                nxt[curr][idx] = unused++;
+            }
+
+            curr = nxt[curr][idx];
         }
+        end_cnt[curr]++;
 
         if (!found_alias) {
             alias = s;
-            if (word_cnt[s] > 1) alias += to_string(word_cnt[s]);
+            if (end_cnt[curr] > 1) alias += to_string(end_cnt[curr]);
         }
 
         cout << alias << '\n';
