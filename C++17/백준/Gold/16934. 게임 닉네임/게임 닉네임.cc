@@ -24,7 +24,7 @@ int main() {
         bool found_alias = false;
 
         for (int i = 1; i <= s.size(); i++) {
-            string prefix = s.substr(0, i);
+            string prefix(s.begin(), s.begin() + i);
             auto it = prefixes.find(prefix);
 
             if (!found_alias && it == prefixes.end()) {
