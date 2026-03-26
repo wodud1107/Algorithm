@@ -7,10 +7,7 @@ word_count = {}
 
 for _ in range(N):
     word = input().strip()
-    
-    if word in word_count:
-        word_count[word] += 1
-    else: word_count[word] = 1
+    word_count[word] = word_count.get(word, 0) + 1
     
     current = prefix
     alias = ""
