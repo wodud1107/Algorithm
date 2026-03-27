@@ -6,45 +6,41 @@ L = int(input())
 R = int(input())
 N = int(input())
 
-mem = [[None] * (N + 1) for _ in range(4)]
-rule = {1: [1, 3, 2], 2: [2, 1, 1], 3: [2, 3, 2]}
+dp = [[[0] * 3 for _ in range(4)] for _ in range(N + 1)]
 
-def get_counts(num, time):
-    if time == 0:
-        res = [0, 0, 0]
-        res[num - 1] = 1
-        return res
-    if mem[num][time] is not None:
-        return mem[num][time]
+for num in range(1, 4):
+    dp[0][num][num - 1] = 1
     
-    c1 = get_counts(rule[num][0], time - 1)
-    c2 = get_counts(rule[num][1], time - 1)
-    c3 = get_counts(rule[num][2], time - 1)
-    
-    mem[num][time] = [c1[i] + c2[i] + c3[i] for i in range(3)]
-    return mem[num][time]
+rules = {1: [1, 3, 2], 2: [2, 1, 1], 3: [2, 3, 2]}
 
-def solve(num, time, start, end):
+for t in range(1, N + 1):
+    for num in range(1, 4):
+        r1, r2, r3 = rules[num]
+        for i in range(3):
+            dp[t][num][i] = dp[t - 1][r1][i] + dp[t - 1][r2][i] + dp[t - 1][r3][i]
+
+def get_counts(num, time, start, end):
     if end < L or start > R:
         return [0, 0, 0]
 
     if L <= start and end <= R:
-        return get_counts(num, time)
+        return dp[time][num]
     
-    if time > 0:
-        step = (end - start + 1) // 3
-        mid1 = start + step
-        mid2 = start + 2 * step
-        
-        r1 = solve(rule[num][0], time - 1, start, mid1 - 1)
-        r2 = solve(rule[num][1], time - 1, mid1, mid2 - 1)
-        r3 = solve(rule[num][2], time - 1, mid2, end)
-        return [r1[i] + r2[i] + r3[i] for i in range(3)]
-    else:
-        res = [0, 0, 0]
+    res = [0, 0, 0]
+    if time == 0:
         res[num - 1] = 1
         return res
+    
+    step = (end - start + 1) // 3
+    curr_start = start
+    for next_num in rules[num]:
+        sub = get_counts(next_num, time - 1, curr_start, curr_start + step - 1)
+        for i in range(3):
+            res[i] += sub[i]
+        curr_start += step
+    
+    return res
 
 total_len = 3 ** N
-answer = solve(init, N, 0, total_len - 1)
+answer = get_counts(init, N, 0, total_len - 1)
 print(*answer)
