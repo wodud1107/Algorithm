@@ -1,25 +1,6 @@
 import sys
 input = sys.stdin.readline
 
-'''
-수 하나만 가지고 있는 수열
-1 -> 132 2 -> 211 3 -> 232 로 바뀜 1초마다 동시에
-123 으로만 이루어짐
-N 초후 L, R 사이 1,2,3 개수 구하기 0부터 인덱싱
-
-계속 3등분해서 길이가 1일 때 판별
-def later(seq):
-    length = len(seq)
-    if length == 1:
-        if seq[0] == "1":
-            return "132"
-        elif seq[0] == "2":
-            return "211"
-        else:
-            return "232"
-    return later(seq[:length // 3]) + later(seq[length // 3:2 * length // 3]) + later(seq[2 * length // 3:])
-'''
-
 init = int(input())
 L = int(input())
 R = int(input())
