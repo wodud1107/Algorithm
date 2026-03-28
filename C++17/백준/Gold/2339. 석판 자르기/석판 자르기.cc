@@ -17,8 +17,8 @@ int cut(const vector<vector<int>>& board, const vector<pii>& dirts, const vector
     int total_cnt = 0;
     if (dir) {
         for (const auto& [i, _]: dirts) {
-            if (i == 0 or i == r_size - 1) continue;
-            if (binary_search(board[i].begin(), board[i].end(), 2)) continue;
+            if (i == 0 || i == r_size - 1) continue;
+            if (find(board[i].begin(), board[i].end(), 2) != board[i].end()) continue;
 
             vector<vector<int>> up(i, vector<int>(c_size, 0));
             vector<pii> up_dirts;
@@ -51,7 +51,7 @@ int cut(const vector<vector<int>>& board, const vector<pii>& dirts, const vector
     }
     else {
         for (const auto& [_, j]: dirts) {
-            if (j == 0 or j == c_size - 1) continue;
+            if (j == 0 || j == c_size - 1) continue;
             bool can_cut = true;
             for (int r = 0; r < r_size; r++) {
                 if (board[r][j] == 2) can_cut = false;
