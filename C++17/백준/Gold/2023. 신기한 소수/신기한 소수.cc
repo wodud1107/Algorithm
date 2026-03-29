@@ -1,5 +1,4 @@
 #include <iostream>
-#include <string>
 using namespace std;
 
 int N;
@@ -22,9 +21,9 @@ void dfs(int num, int size) {
         return;
     }
 
-    int odd_2[6] = { 1, 2, 3, 5, 7, 9 };
+    int odd[5] = { 1, 3, 5, 7, 9 };
 
-    for (int o : odd_2) {
+    for (int o : odd) {
         int next = num * 10 + o;
         if (!is_prime(next)) continue;
         dfs(next, size + 1);
@@ -38,7 +37,10 @@ int main() {
     cin.tie(NULL);
 
     cin >> N;
-    dfs(0, 0);
+    dfs(2, 1);
+    dfs(3, 1);
+    dfs(5, 1);
+    dfs(7, 1);
 
     return 0;
 }
