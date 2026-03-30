@@ -11,7 +11,7 @@ vector<pii> walls;
 vector<pii> viruses;
 int answer = 0;
 
-vector<vector<int>> spread(vector<vector<int>>& curr_board) {
+void spread(vector<vector<int>>& curr_board) {
     queue<pii> q(deque<pii>(viruses.begin(), viruses.end()));
 
     int dx[4] = {-1, 1, 0, 0};
@@ -32,8 +32,6 @@ vector<vector<int>> spread(vector<vector<int>>& curr_board) {
             }
         }
     }
-
-    return curr_board;
 }
 
 void dfs(int cnt, vector<vector<int>>& curr_board) {
