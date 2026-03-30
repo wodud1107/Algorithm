@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <queue>
-#include <algorithm>
 using namespace std;
 using pii = pair<int, int>;
 
@@ -50,7 +49,7 @@ void dfs(int cnt, int start) {
                 if (spread_board[i][j] == 0) cnt++;
             }
         }
-        answer = max(answer, cnt);
+        answer = answer > cnt ? answer : cnt;
         return;
     }
 
