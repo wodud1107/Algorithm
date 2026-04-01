@@ -4,7 +4,6 @@
 using namespace std;
 
 int N, K;
-vector<string> words;
 vector<int> word_masks;
 vector<char> untaught;
 int learned = 0;
@@ -32,9 +31,15 @@ int main() {
     cin.tie(NULL);
     
     cin >> N >> K;
-    words.resize(N);
     for (int i = 0; i < N; i++) {
-        cin >> words[i];
+        string word;
+        cin >> word;
+
+        int mask = 0;
+        for (char c : word) {
+            mask |= 1 << (c - 'a');
+        }
+        word_masks.push_back(mask);
     }
     if (K < 5) { cout << 0; return 0; }
     if (K == 26) { cout << N; return 0; }
@@ -46,14 +51,6 @@ int main() {
     for (int i = 0; i < 26; i++) {
         if (learned & (1 << i)) continue;
         untaught.push_back('a' + i);
-    }
-
-    for (int i = 0; i < N; i++) {
-        int mask = 0;
-        for (char c : words[i]) {
-            mask |= 1 << (c - 'a');
-        }
-        word_masks.push_back(mask);
     }
 
     teach(0, 0);
