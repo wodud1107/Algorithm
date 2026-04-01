@@ -1,76 +1,49 @@
 #include <iostream>
 #include <string.h>
-#include <vector>
 #include <deque>
 using namespace std;
 using pii = pair<int, int>;
 
 int N;
-vector<vector<int>> board;
-vector<pii> eat;
+int board[20][20];
+int visited[20][20];
 
 pii s_pos;
 int s_size = 2;
 int eat_cnt = 0;
 
-deque<pii> q;
-int visited[20][20];
-
 int dx[4] = {0, -1, 1, 0};
 int dy[4] = {-1, 0, 0, 1};
 int answer = 0;
 
-void find(vector<pii>& eat) {
-    eat.clear();
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-            if (board[i][j] != 0 && board[i][j] < s_size)
-                eat.emplace_back(i, j);
-        }
-    }
-}
-
-void init_board(vector<vector<int>>& curr_board) {
-    q = {s_pos};
+bool bfs() {
     memset(visited, -1, sizeof(visited));
+    deque<pii> q;
+    q.push_back(s_pos);
     visited[s_pos.first][s_pos.second] = 0;
-    curr_board[s_pos.first][s_pos.second] = 0;
-    find(eat);
-}
 
-
-void bfs() {
-    init_board(board);
+    int min_time = -1;
+    int goal_x = -1, goal_y = -1;
 
     while (!q.empty()) {
         auto [x, y] = q.front();
         q.pop_front();
 
-        if (eat.empty()) break;
+        if (min_time != -1 && visited[x][y] > min_time) break;
 
-        int goal_x = -1, goal_y = -1;
-        int min_time = N * N;
-        for (const auto& [e_x, e_y] : eat) {
-            if (visited[e_x][e_y] == -1) continue;
-            if (min_time > visited[e_x][e_y]) {
-                min_time = visited[e_x][e_y];
-                goal_x = e_x;
-                goal_y = e_y;
+        if (board[x][y] != 0 && board[x][y] < s_size) {
+            if (min_time == -1) {
+                min_time = visited[x][y];
+                goal_x = x;
+                goal_y = y;
             }
-        }
-
-        if (goal_x == x && goal_y == y) {
-            board[x][y] = 0;
-            s_pos = {x, y};
-            init_board(board);
-            eat_cnt++;
-            answer += min_time;
-        }
-
-        if (eat_cnt == s_size) {
-            eat_cnt = 0;
-            s_size++;
-            find(eat);
+            else {
+                if (x < goal_x || (x == goal_x && y < goal_y)) {
+                    goal_x = x;
+                    goal_y = y;
+                }
+            }
+            continue;
         }
 
         for (int i = 0; i < 4; i++) {
@@ -87,6 +60,18 @@ void bfs() {
             }
         }
     }
+
+    if (goal_x == -1) return false;
+    answer += min_time;
+    eat_cnt++;
+    board[goal_x][goal_y] = 0;
+    s_pos = {goal_x, goal_y};
+
+    if (eat_cnt == s_size) {
+        eat_cnt = 0;
+        s_size++;
+    }
+    return true;
 }
 
 int main() {
@@ -94,15 +79,17 @@ int main() {
     cin.tie(NULL);
 
     cin >> N;
-    board.resize(N, vector<int>(N));
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             cin >> board[i][j];
-            if (board[i][j] == 9) s_pos = {i, j};
+            if (board[i][j] == 9) {
+                s_pos = {i, j};
+                board[i][j] = 0;
+            }
         }
     }
 
-    bfs();
+    while (bfs()) {}
     cout << answer;
 
     return 0;
