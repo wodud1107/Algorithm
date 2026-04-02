@@ -5,8 +5,8 @@ using namespace std;
 using pii = pair<int, int>;
 
 int N, M;
-int board[101][101];
-int visited[101][101];
+int board[100][100];
+int visited[100][100];
 int answer = 10000;
 
 int dx[4] = {-1, 1, 0, 0};
@@ -17,32 +17,27 @@ int main() {
     cin.tie(NULL);
 
     cin >> N >> M;
-    for (int i = 1; i <= N; i++) {
+    for (int i = 0; i < N; i++) {
         string line;
         cin >> line;
-        for (int j = 1; j <= M; j++) {
-            board[i][j] = line[j - 1] - '0';
+        for (int j = 0; j < M; j++) {
+            board[i][j] = line[j] - '0';
             visited[i][j] = -1;
         }
     }
 
     queue<pii> q;
-    q.emplace(1, 1);
-    visited[1][1] = 1;
+    q.emplace(0, 0);
+    visited[0][0] = 1;
     while (!q.empty()) {
         auto [x, y] = q.front();
         q.pop();
-
-        if (x == N && y == M) {
-            if (answer > visited[x][y])
-                answer = visited[x][y];
-        }
 
         for (int i = 0; i < 4; i++) {
             int nx = x + dx[i];
             int ny = y + dy[i];
 
-            if (1 <= nx && nx <= N && 1 <= ny && ny <= M && visited[nx][ny] == -1) {
+            if (0 <= nx && nx < N && 0 <= ny && ny < M && visited[nx][ny] == -1) {
                 if (board[nx][ny] == 1) {
                     visited[nx][ny] = visited[x][y] + 1;
                     q.emplace(nx, ny);
@@ -51,7 +46,7 @@ int main() {
         }
     }
 
-    cout << answer;
+    cout <<visited[N - 1][M - 1];
 
     return 0;
 }
