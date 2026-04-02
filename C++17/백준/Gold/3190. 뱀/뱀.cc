@@ -1,14 +1,11 @@
 #include <iostream>
-#include <vector>
-#include <queue>
+#include <deque>
 using namespace std;
 using pii = pair<int, int>;
 
 int N, K, L;
 int board[101][101];
-int body[101][101];
 pii curr_d = {0, 1};
-int body_size = 1;
 
 int main() {
     ios::sync_with_stdio(false);
@@ -29,24 +26,13 @@ int main() {
         dirs[t] = d;
     }
 
-    queue<pii> q;
-    q.push({1, 1});
-    vector<pii> head_track;
-    pii tail = {1, 1};
+    deque<pii> q;
+    q.emplace_back(1, 1);
+    board[1][1] = 2;
     int t = 0;
     while (!q.empty()) {
         auto [x, y] = q.front();
-        q.pop();
-
-        head_track.emplace_back(x, y);
-        if (t > 0) {
-            pii prev_tail = tail;
-            tail = head_track[t - body_size + 1];
-            if (prev_tail != tail) {
-                body[prev_tail.first][prev_tail.second]--;
-            }
-        }
-        body[x][y]++;
+        board[x][y] = 2;
 
         int nx = x + curr_d.first;
         int ny = y + curr_d.second;
@@ -73,14 +59,17 @@ int main() {
             }
         }
 
-        if (1 > nx || nx > N || 1 > ny || ny > N || body[nx][ny] > 0) {
+        if (1 > nx || nx > N || 1 > ny || ny > N || board[nx][ny] == 2) {
             cout << t;
             break;
+        } else if (board[nx][ny] == 0) {
+            auto [tx, ty] = q.back();
+            q.pop_back();
+            board[tx][ty] = 0;
         } else if (board[nx][ny] == 1) {
             board[nx][ny] = 0;
-            body_size++;
         }
-        q.emplace(nx, ny);
+        q.emplace_front(nx, ny);
     }
 
     return 0;
