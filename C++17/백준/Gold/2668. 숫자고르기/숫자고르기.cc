@@ -27,7 +27,7 @@ int main() {
     }
 
     for (int i = 1; i <= N; i++) {
-        vector<bool> visited(N, false);
+        vector<bool> visited(N + 1, false);
         dfs(i, i, visited);
     }
 
