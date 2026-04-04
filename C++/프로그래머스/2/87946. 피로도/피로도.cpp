@@ -6,7 +6,7 @@ using namespace std;
 int global_k;
 int answer = 0;
 
-void dfs(int cnt, vector<vector<int>>& dungeons, vector<bool> visited) {
+void dfs(int cnt, vector<vector<int>>& dungeons, vector<bool>& visited) {
     if (answer < cnt) answer = cnt;
     
     for (int i = 0; i < dungeons.size(); i++) {
