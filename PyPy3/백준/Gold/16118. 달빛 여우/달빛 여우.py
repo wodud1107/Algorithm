@@ -1,6 +1,7 @@
 import sys
 import heapq
 input = sys.stdin.readline
+INF = 1e15
 
 N, M = map(int, input().split())
 
@@ -10,7 +11,7 @@ for i in range(M):
     graph[a].append((b, 2 * d))
     graph[b].append((a, 2 * d))
     
-fox_time = [float('inf')] * (N + 1)
+fox_time = [INF] * (N + 1)
 fox_time[1] = 0
 fox_q = [(0, 1)]
 while fox_q:
@@ -24,7 +25,7 @@ while fox_q:
             fox_time[next] = next_dist
             heapq.heappush(fox_q, (next_dist, next))
             
-wolf_time = [[float('inf')] * (N + 1) for _ in range(2)]
+wolf_time = [[INF] * (N + 1) for _ in range(2)]
 wolf_time[0][1] = 0
 wolf_q = [(0, 1, 0)]
 while wolf_q:
