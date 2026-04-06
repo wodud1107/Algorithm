@@ -18,37 +18,27 @@ for i in range(M):
     wolf_graph[a + N].append((b, 2 * d))
     wolf_graph[b + N].append((a, 2 * d))
     
-    
-fox_time = [INF] * (N + 1)
-fox_time[1] = 0
-fox_q = [(0, 1)]
-while fox_q:
-    distance, curr = heapq.heappop(fox_q)
-    
-    if (fox_time[curr] < distance): continue
-    
-    for (next, dist) in fox_graph[curr]:
-        next_dist = distance + dist
-        if (next_dist < fox_time[next]):
-            fox_time[next] = next_dist
-            heapq.heappush(fox_q, (next_dist, next))
+fox_dist = [INF] * (N + 1)
+wolf_dist = [INF] * (2 * N + 1)
+def dijkstra(dist, graph):
+    dist[1] = 0
+    q = [(0, 1)]
+    while q:
+        distance, curr = heapq.heappop(q)
+        
+        if (dist[curr] < distance): continue
+        
+        for (next, d) in graph[curr]:
+            next_dist = distance + d
+            if (next_dist < dist[next]):
+                dist[next] = next_dist
+                heapq.heappush(q, (next_dist, next))
             
-wolf_time = [INF] * (2 * N + 1)
-wolf_time[1] = 0
-wolf_q = [(0, 1)]
-while wolf_q:
-    distance, curr = heapq.heappop(wolf_q)
-    
-    if (wolf_time[curr] < distance): continue
-    
-    for (next, dist) in wolf_graph[curr]:
-        next_dist = distance + dist
-        if (next_dist < wolf_time[next]):
-            wolf_time[next] = next_dist
-            heapq.heappush(wolf_q, (next_dist, next))
+dijkstra(fox_dist, fox_graph)
+dijkstra(wolf_dist, wolf_graph)
             
 answer = 0
 for i in range(1, N + 1):
-    if (fox_time[i] < min(wolf_time[i], wolf_time[i + N])): answer += 1
+    if (fox_dist[i] < min(wolf_dist[i], wolf_dist[i + N])): answer += 1
     
 print(answer)
