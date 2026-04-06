@@ -7,8 +7,8 @@ N, M = map(int, input().split())
 graph = [[] for _ in range(N + 1)]
 for i in range(M):
     a, b, d = map(int, input().split())
-    graph[a].append((b, d))
-    graph[b].append((a, d))
+    graph[a].append((b, 2 * d))
+    graph[b].append((a, 2 * d))
     
 fox_time = [float('inf')] * (N + 1)
 fox_time[1] = 0
@@ -34,11 +34,10 @@ while wolf_q:
     
     for (next, dist) in graph[curr]:
         if (parity == 0):
-            next_dist = distance + dist / 2
-            next_parity = 1
+            next_dist = distance + dist // 2
         else:
             next_dist = distance + 2 * dist
-            next_parity = 0
+        next_parity = 1 - parity
         if (next_dist < wolf_time[next_parity][next]):
             wolf_time[next_parity][next] = next_dist
             heapq.heappush(wolf_q, (next_dist, next, next_parity))
