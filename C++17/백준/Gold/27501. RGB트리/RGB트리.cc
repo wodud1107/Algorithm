@@ -2,22 +2,21 @@
 #include <vector>
 #include <algorithm>
 using namespace std;
+using ll = long long;
 
 vector<vector<int>> tree;
 
-void dfs(int node, vector<vector<int>>& dp, vector<bool>& visited) {
+void dfs(int node, int parent, vector<array<ll, 3>>& dp) {
     for (int nxt : tree[node]) {
-        if (!visited[nxt]) {
-            visited[nxt] = true;
-            dfs(nxt, dp, visited);
-            dp[node][0] += max(dp[nxt][1], dp[nxt][2]);
-            dp[node][1] += max(dp[nxt][0], dp[nxt][2]);
-            dp[node][2] += max(dp[nxt][0], dp[nxt][1]);
-        }
+        if (nxt == parent) continue;
+        dfs(nxt, node, dp);
+        dp[node][0] += max(dp[nxt][1], dp[nxt][2]);
+        dp[node][1] += max(dp[nxt][0], dp[nxt][2]);
+        dp[node][2] += max(dp[nxt][0], dp[nxt][1]);
     }
 }
 
-void trace(int node, int parent, vector<vector<int>>& dp, vector<int>& colors) {
+void trace(int node, int parent, vector<array<ll, 3>>& dp, vector<int>& colors) {
     int parent_color = colors[node];
 
     for (int nxt : tree[node]) {
@@ -50,7 +49,7 @@ int main() {
         tree[b].push_back(a);
     }
 
-    vector<vector<int>> light(N + 1, vector<int>(3));
+    vector<array<ll, 3>> light(N + 1), dp(N + 1);
     for (int i = 1; i <= N; i++) {
         for (int j = 0; j < 3; j++) {
             int c; cin >> c;
@@ -58,10 +57,8 @@ int main() {
         }
     }
 
-    vector<vector<int>> dp = light;
-    vector<bool> visited(N + 1, false);
-    visited[1] = true;
-    dfs(1, dp, visited);
+    dp = light;
+    dfs(1, 0, dp);
 
     vector<int> colors(N + 1);
     int root_color = 0;
