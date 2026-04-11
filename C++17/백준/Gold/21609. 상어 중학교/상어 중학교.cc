@@ -73,7 +73,6 @@ int remove_blocks() {
     vector<Group> groups = find_group();
     int max_size = -1, max_rain_cnt = -1, max_r = -1, max_c = -1, idx = -1;
     for (int i = 0; i < groups.size(); i++) {
-        if (groups[i].size < 2) continue;
         if (max_size < groups[i].size) {
             max_size = groups[i].size;
             max_rain_cnt = groups[i].rainbow;
