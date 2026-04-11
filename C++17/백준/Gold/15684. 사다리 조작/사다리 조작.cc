@@ -5,18 +5,22 @@ int N, M, H;
 int ladders[31][11];
 int answer = -1;
 
-void dfs(int x, int y, int cnt, int target) {
-    if (cnt == target) {        
-        bool good = true;
-        for (int j = 1; j <= N; j++) {
-            int curr = j;
-            for (int i = 1; i <= H; i++) {
-                curr = ladders[i][curr];
-            }
-            if (curr != j) good = false;
+bool check() {
+    for (int j = 1; j <= N; j++) {
+        int curr = j;
+        for (int i = 1; i <= H; i++) {
+            curr = ladders[i][curr];
         }
+        if (curr != j) return false;
+    }
+    return true;
+}
 
-        if (good) {
+void dfs(int x, int y, int cnt, int target) {
+    if (answer != -1) return;
+
+    if (cnt == target) {        
+        if (check()) {
             answer = cnt;
         }
         return;
@@ -57,7 +61,12 @@ int main() {
         swap(ladders[a][b], ladders[a][b + 1]);
     }
 
-    for (int i = 0; i < 4; i++) {
+    if (check()) {
+        cout << 0 << '\n';
+        return 0;
+    }
+
+    for (int i = 1; i < 4; i++) {
         dfs(1, 1, 0, i);
         if (answer != -1) break;
     }
