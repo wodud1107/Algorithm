@@ -45,27 +45,35 @@ int main() {
             if (s.r == -1) continue;
 
             int sx = s.r, sy = s.c;
-            int should_go = s.s;
-            if (s.d == 1 || s.d == 2) {
-                should_go %= (2 * (R - 1));
-            } else {
-                should_go %= (2 * (C - 1));
-            }
-            while (should_go-- > 0) {
-                auto [dx, dy] = dir[s.d];
-                sx += dx; sy += dy;
+            auto [dx, dy] = dir[s.d];
+            if (s.d <= 2) {
+                int x = sx - 1;
+                int cycle = 2 * (R - 1);
 
-                if (!(1 <= sx && sx <= R && 1 <= sy && sy <= C)) {
-                    sx -= dx; sy -= dy;
-                    should_go++;
-                    switch (s.d) {
-                    case 1: { s.d = 2; break; }
-                    case 2: { s.d = 1; break; }
-                    case 3: { s.d = 4; break; }
-                    case 4: { s.d = 3; break; }
-                    }
+                x += dx * s.s;
+                x = (x % cycle + cycle) % cycle;
+
+                if (x > R - 1) {
+                    x = cycle - x;
+                    s.d ^= 3;
                 }
+
+                sx = x + 1;
+            } else {
+                int y = sy - 1;
+                int cycle = 2 * (C - 1);
+
+                y += dy * s.s;
+                y = (y % cycle + cycle) % cycle;
+
+                if (y > C - 1) {
+                    y = cycle - y;
+                    s.d ^= 7;
+                }
+
+                sy = y + 1;
             }
+            
             s.r = sx;
             s.c = sy;
         }
