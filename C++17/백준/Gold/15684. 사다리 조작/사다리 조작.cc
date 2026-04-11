@@ -36,7 +36,7 @@ void dfs(int x, int y, int cnt, int target) {
             if (j < N - 1 && ladders[i][j + 1]) continue;
 
             ladders[i][j] = true;
-            dfs(x, y + 1, cnt + 1, target);
+            dfs(i, j + 2, cnt + 1, target);
             ladders[i][j] = false;
         }
     }
