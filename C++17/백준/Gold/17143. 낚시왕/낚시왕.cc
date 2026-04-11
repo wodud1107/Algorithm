@@ -20,33 +20,25 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(NULL);
 
+    memset(board, -1, sizeof(board));
     cin >> R >> C >> M;
     for (int i = 0; i < M; i++) {
         int r, c, s, d, z;
         cin >> r >> c >> s >> d >> z;
-        board[r][c] = z;
+        board[r][c] = i;
         sharks.push_back({r, c, s, d, z});
     }
 
     int answer = 0;
     for (int j = 1; j <= C; j++) {
-        Shark target = {-1, -1, 0, 0, 0};
-
-        bool search = false;
-        for (Shark s : sharks) {
-            if (s.z != 0) search = true; 
-        }
-        if (!search) break;
         for (int i = 1; i <= R; i++) {
-            for (Shark& s : sharks) {
-                if (target.z != 0) break;
-                if (s.c == j && s.r == i) {
-                    swap(target, s);
-                    break;
-                }
+            int idx = board[i][j];
+            if (idx != -1) {
+                answer += sharks[idx].z;
+                sharks[idx] = {-1, -1, 0, 0, 0};
+                board[i][j] = -1;
+                break;
             }
-
-            if (target.z != 0) { answer += target.z; break; }
         }
         
         for (Shark& s : sharks) {    
