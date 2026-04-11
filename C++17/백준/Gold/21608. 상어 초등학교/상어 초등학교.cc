@@ -9,9 +9,8 @@ int like[401][4];
 pii dirs[4] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
 void find_seat(int id) {
-    int v[21][21] = {};
-    int l[21][21] = {};
-    int maximum = -1, r = -1, c = -1;
+    int best_empty = -1, best_like = -1;
+    int r = -1, c = -1;
     for (int i = 1; i <= N; i++) {
         for (int j = 1; j <= N; j++) {
             if (board[i][j] != 0) continue;
@@ -29,15 +28,18 @@ void find_seat(int id) {
                     }
                 }
             }
-            v[i][j] = cnt;
-            l[i][j] = l_cnt;
 
-            if (maximum < l_cnt) {
-                maximum = l_cnt; r = i; c = j;
+            if (best_like < l_cnt) {
+                best_empty = cnt;
+                best_like = l_cnt;
+                r = i; c = j;
             }
-            else if (maximum == l_cnt) {
-                if (v[i][j] > v[r][c]) { r = i; c = j; }
-                else if (v[i][j] == v[r][c]) {
+            else if (best_like == l_cnt) {
+                if (best_empty < cnt) { 
+                    best_empty = cnt;
+                    r = i; c = j;
+                }
+                else if (best_empty == cnt) {
                     if (i < r) { r = i; c = j;}
                     else if (i == r) {
                         if (j < c) c = j;
